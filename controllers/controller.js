@@ -154,47 +154,47 @@ let forgotPassword = async (req, res) => {
 }
 
 const resetPassword = async (req, res) => {
-	try {
-		const { token } = req.params;
-		const { password } = req.body;
+    try {
+        const { token } = req.params;
+        const { password } = req.body;
 
-		const user = await user.findOne({
-			resetPasswordToken: token,
-			resetPasswordExpire: { $gt: Date.now() },
-		});
+        const users = await user.findOne({
+            resetPasswordToken: token,
+            resetPasswordExpire: { $gt: Date.now() },
+        });
 
-		if (!user) {
-			return res.status(400).json({ success: false, message: "Invalid or expired reset token" });
-		}
+        if (!users) {
+            return res.status(400).json({ success: false, message: "Invalid or expired reset token" });
+        }
 
-		// update password
-		const hashedPassword = await bcrypt.hash(password, 10);
+        // update password
+        const hashedPassword = await bcrypt.hash(password, 10);
 
-		user.password = hashedPassword;
-		user.resetPasswordToken = undefined;
-		user.resetPasswordExpiresAt = undefined;
-		await user.save();
+        users.password = hashedPassword;
+        users.resetPasswordToken = undefined;
+        users.resetPasswordExpire = undefined;
+        await users.save();
 
-		await sendResetPasswordEmailSuccess(user.email);
+        await sendResetPasswordEmailSuccess(users.email);
 
-		res.status(200).json({ success: true, message: "Password reset successful" });
-	} catch (error) {
-		console.log("Error in resetPassword ", error);
-		res.status(400).json({ success: false, message: error.message });
-	}
+        res.status(200).json({ success: true, message: "Password reset successful" });
+    } catch (error) {
+        console.log("Error in resetPassword ", error);
+        res.status(400).json({ success: false, message: error.message });
+    }
 };
 
 let check_Token = async (req, res) => {
-	try {
-		const users = await user.findById(req.userId).select("-password");
-		if (!user) {
-			return res.status(400).json({ success: false, message: "User not found" });
-		}
+    try {
+        const users = await user.findById(req.userId).select("-password");
+        if (!user) {
+            return res.status(400).json({ success: false, message: "User not found" });
+        }
 
-		res.status(200).json({ success: true, users });
-	} catch (error) {
-		res.status(400).json({ success: false, message: error.message });
-	}
+        res.status(200).json({ success: true, users });
+    } catch (error) {
+        res.status(400).json({ success: false, message: error.message });
+    }
 };
 
 export {
