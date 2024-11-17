@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js",
-    "build" : "npm install && npm install --prefixed frontend && npm run build --prefixed frontend"
+    "build": "npm install && npm install --prefixed frontend && npm run build --prefixed frontend"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +22,7 @@
     "jsonwebtoken": "^9.0.2",
     "mailtrap": "^3.4.0",
     "mongoose": "^8.7.0",
+    "nodemailer": "^6.9.16",
     "nodemon": "^3.1.7"
   }
 }

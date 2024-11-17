@@ -1,13 +1,34 @@
-import {MailtrapClient} from "mailtrap";
+
+import nodemailer from "nodemailer";
 import 'dotenv/config'
-const TOKEN = process.env.EMAIL_TOKEN
 
-export const client = new MailtrapClient({
-  token: TOKEN,
-});
+let transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "abdulrehmanarain1018@gmail.com",
+    pass: "zhefgzfrvqsbnspl"
+  }
+})
 
-export const sender = {
-  email: "hello@demomailtrap.com",
+
+const senders = {
+  email: "abdulrehmanarain1018@gmail.com",
   name: "Rehman Official",
 };
-    
+
+export const sendEmail = (to, subject, text) => {
+  const mailOptions = {
+    from: `${senders.name} <${senders.email}>`,
+    to: to,
+    subject: subject,
+    html: text
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Email sent: " + info.response);
+    }
+  })
+}
